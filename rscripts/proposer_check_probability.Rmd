@@ -1,0 +1,56 @@
+---
+title: "Proposer check"
+author:
+- name: Sandra Johnson
+  url: https://twitter.com/sandJohnson
+  affiliation: Consensys Software Inc (Research Group)
+date: "`r Sys.Date()`"
+description: 
+  Visualisation of proposer selection probabilities for increased maximum effective balance.
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+```{r message=FALSE}
+library(data.table)
+library(ggplot2)
+library(knitr)
+library(lubridate)
+library(rmarkdown)
+library(skimr)
+library(tidyverse)
+
+options(digits=10)
+options(scipen = 999) 
+
+# See knit options in https://www.r-bloggers.com/2021/03/default-knitr-options-and-hooks/ 
+knitr::opts_chunk$set(dpi = if (knitr::is_latex_output()) 72 else 300,
+                      echo=FALSE)
+```
+
+## Proposer eligibility check probability
+Draw a plot of EB (horizontal axis) vs the probability of passing the test (vertical axis). 
+
+```{r}
+x <- c(32, 64, 160, 320, 960, 2048)
+y <- c(0.015625, 0.03125, 0.078125, 0.15625, 0.46875, 1.00)
+
+proposer_check <- data.frame(x,y)
+
+ggplot(data=proposer_check, aes(x=x,y=y)) +
+  geom_line() +
+  xlab("validator effective balance") +
+  ylab("probability of passing proposer check") +
+  xlim(32,2048) +
+  ylim(0,1) +
+  geom_segment(aes(x = 32, y = 0, xend = 32, yend = 0.015625, colour="32ETH")) +
+  geom_segment(aes(x = 64, y = 0, xend = 64, yend = 0.03125, colour="64ETH")) + 
+  geom_segment(aes(x = 160, y = 0, xend = 160, yend = 0.078125, colour="160ETH")) +
+  geom_segment(aes(x = 320, y = 0, xend = 320, yend = 0.15625, colour="320ETH")) + 
+  geom_segment(aes(x = 960, y = 0, xend = 960, yend = 0.46875, colour="960ETH")) +
+  geom_segment(aes(x = 2048, y = 0, xend = 2048, yend = 1, colour="2048ETH")) + 
+  labs(colour="Validator\nConsolidation") +
+  scale_colour_discrete(breaks=c("32ETH", "64ETH", "160ETH", "320ETH","960ETH","2048ETH")) # reorder legend labels
+```
+
+
