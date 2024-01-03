@@ -1,0 +1,225 @@
+class validatoreconomics
+{
+    inputs = ();
+    outputs = ();
+    node_size = (80 40);
+    HR_TextLabel_1_BackgroundColor = "#ffffff";
+    HR_TextLabel_1_TextColor = "#333333";
+    HR_TextLabel_1_Font = "Dialog-PLAIN-13";
+    HR_TextLabel_1_Size = "100,50";
+    HR_TextLabel_1_Position = "17,628";
+    HR_TextLabel_1_Description = "Version 4";
+    HR_DBN_Use_BK = "0";
+    HR_Html_Desc = "0";
+    HR_HTML_Desc = "This model is a simple HMM<br><br>it models development of temperature over time.<br><br>One time step is one year<br><br>Each year we observe the number of tree rings.<br><br>A Revealing Introduction to Hidden Markov Models<br>Mark Stamp\3<br>Associate Professor<br>Department of Computer Science<br>San Jose State University<br>September 28, 2012<br>1 A simple example<br>Suppose we want to determine the average annual temperature at a particular location on<br>earth over a series of years. To make it interesting, suppose the years we are concerned with<br>lie in the distant past, before thermometers were invented.<br><br>To simplify the problem, we only consider two annual temperatures, \\hot\" and \\cold\".<br>Suppose that modern evidence indicates that the probability of a hot year followed by another<br>hot year is 0.7 and the probability that a cold year is followed by another cold year is 0.6.<br>We'll assume that these probabilities held in the distant past as well<br><br>Also suppose that current research indicates a correlation between the size of tree growth<br>rings and temperature.";
+    HR_Link_Groups_IDs = "";
+    HR_Node_Label_Style = "0";
+    HR_Group_3_Color = "25";
+    HR_Group_3_Name = "BN_Info";
+    HR_Groups_IDs = "3";
+    HR_TextLabel_IDs = "";
+    HR_CPT_Font_Size = "-12";
+    HR_CPT_Font_Name = "com.apple.laf.AquaFonts$DerivedUIResourceFont[family=Lucida Grande,name=Lucida Grande,style=plain,size=13]";
+    HR_CPT_Font_Italic = "0";
+    HR_CPT_Font_Weight = "400";
+    HR_Monitor_Variance_Utility = "1";
+    HR_Monitor_Display_Prob_DD = "0";
+    HR_DBN_Num_Slices = "5";
+    HR_Desc = "This model is a simple HMM\n\nit models development of temperature over time.\n\nOne time step is one year\n\nEach year we observe the number of tree rings.\n\nA Revealing Introduction to Hidden Markov Models\nMark Stamp\3\nAssociate Professor\nDepartment of Computer Science\nSan Jose State University\nSeptember 28, 2012\n1 A simple example\nSuppose we want to determine the average annual temperature at a particular location on\nearth over a series of years. To make it interesting, suppose the years we are concerned with\nlie in the distant past, before thermometers were invented.\n\nTo simplify the problem, we only consider two annual temperatures, \\hot\" and \\cold\".\nSuppose that modern evidence indicates that the probability of a hot year followed by another\nhot year is 0.7 and the probability that a cold year is followed by another cold year is 0.6.\nWe'll assume that these probabilities held in the distant past as well\n\nAlso suppose that current research indicates a correlation between the size of tree growth\nrings and temperature.";
+    HR_OOBN_CheckConsistency = "1";
+    HR_OOBN_FitExpand = "1";
+    HR_Zoom_ZoomFactor = "100";
+    HR_Groups_GroupColors = "";
+    HR_Groups_GroupNames = "";
+    HR_Groups_UserGroupsNo = "0";
+    HR_Utility_Link = "63";
+    HR_Probabilistic_Link = "63";
+    HR_Functional_Link = "63";
+    HR_Binding_Link = "63";
+    HR_Information_Arc = "63";
+    HR_Color_Interface = "21";
+    HR_Color_Instance = "0";
+    HR_Color_DiscreteFunction = "5";
+    HR_Color_Function = "4";
+    HR_Color_Utility = "36";
+    HR_Color_Decision = "17";
+    HR_Color_ContinuousChance = "48";
+    HR_Color_DiscreteChance = "16";
+    HR_Monitor_InitSD = "2";
+    HR_Monitor_Utility_Arrange = "0";
+    HR_Monitor_Mean_Variance = "1";
+    HR_Monitor_Chance_Utility = "1";
+    HR_Monitor_InitStates = "5";
+    HR_Monitor_OpenGraph = "0";
+    HR_Monitor_GraphPrecision = "100";
+    HR_Monitor_AutoUpdGraph = "0";
+    HR_Compile_MaxMinimalSeparators = "100000";
+    HR_Compile_ApproxEpsilon = "1.0E-5";
+    HR_Compile_Approximate = "0";
+    HR_Compile_SaveToMemory = "0";
+    HR_Compile_Compress = "0";
+    HR_Compile_TriangMethod = "0";
+    HR_Propagate_AutoNormal = "1";
+    HR_Propagate_AutoSum = "1";
+    HR_Propagate_Auto = "1";
+    HR_Font_Italic = "0";
+    HR_Font_Weight = "400";
+    HR_Font_Size = "-12";
+    HR_Font_Name = "javax.swing.plaf.FontUIResource[family=Tahoma,name=Tahoma,style=plain,size=11]";
+    HR_Grid_GridShow = "0";
+    HR_Grid_GridSnap = "1";
+    HR_Grid_Y = "40";
+    HR_Grid_X = "40";
+
+    instance validatoreconomics_probs_1 : validatoreconomics_probs (EB = EB; validatoreconomics_probs_1_Candidate = Candidate, validatoreconomics_probs_1_EB_copy = EB_copy)
+    {
+	label = "Probability\ncalculations";
+	position = (400 320);
+	HR_LinkModeInstance = "";
+	HR_LinkControlPointsInstance = "";
+	HR_LinkGroupInstance = "[validatoreconomics_v6_SJ_probs_1_EB_copy;EB_copy:-3][validatoreconomics_v6_SJ_probs_1_Candidate;Candidate:-4][validatoreconomics_v6_SJ_probs_1_EB_copy;ProposerCheck:-4]";
+	HR_InterfaceNode_placement = "horizontal";
+	HR_InterfaceNode_size = "160,60";
+	HR_Group = "3";
+	HR_HTML_Desc = "";
+	HR_Desc = "";
+	HR_isCollapsed = "true";
+	HR_NodeSize = "(170, 72)";
+    }
+
+    node NextProposer
+    {
+	label = "Proposer for \nnext block";
+	position = (390 576);
+	states = ("no" "yes");
+	HR_NodeSize = "(160, 40)";
+	HR_Group = "0";
+	HR_Desc = "";
+	HR_State_1 = "";
+	HR_State_0 = "";
+    }
+
+    node ProposerCheck
+    {
+	label = "Proposer \ncheck";
+	position = (518 438);
+	states = ("false" "true");
+	subtype = boolean;
+	HR_State_0 = "";
+	HR_State_1 = "";
+	HR_Desc = "What is the probability of passing the proposer eligibility check? This depends on the random byte generated and the validator's effective balance.";
+	HR_NodeSize = "(160, 50)";
+	HR_LinkMode = "[NextProposer:0]";
+	HR_LinkGroup = "[NextProposer:0]";
+	HR_State_2 = "";
+	HR_State_3 = "";
+	HR_State_4 = "";
+	HR_State_5 = "";
+	HR_State_6 = "";
+	HR_State_7 = "";
+	HR_State_8 = "";
+	HR_State_9 = "";
+	HR_LinkControlPoints = "";
+	HR_Group = "0";
+    }
+
+    node Candidate
+    {
+	label = "Validator type\nselected as candidate for\nproposer duty";
+	position = (277 419);
+	states = ("false" "true");
+	subtype = boolean;
+	HR_LinkControlPoints = "";
+	HR_HTML_Desc = "";
+	HR_LinkGroup = "[NextProposer:0]";
+	HR_LinkMode = "[NextProposer:0]";
+	HR_NodeSize = "(160, 50)";
+	HR_Group = "0";
+	HR_Desc = "";
+	HR_State_1 = "";
+	HR_State_0 = "";
+    }
+
+    node EB
+    {
+	label = "Consolidated \nvalidator types";
+	position = (398 182);
+	states = ("32ETH" "64ETH" "160ETH" "320ETH" "960ETH" "2048ETH");
+	subtype = number;
+	state_values = (1 2 5 10 30 64);
+	HR_Node_states = "labels";
+	HR_HTML_Desc = "This node contains the various effective balances, depending on the number of merged validators.";
+	HR_State_0 = "";
+	HR_State_1 = "";
+	HR_Desc = "This node contains the various effective balances, depending on the number of merged validators.";
+	HR_NodeSize = "(160, 50)";
+	HR_LinkMode = "[ProposerCheck:0][F1:0][DF1:0][p0:0][p0_1:0][p0_2:0][p0_3:0][p0_4:0][p0_5:0][EB:0]";
+	HR_LinkGroup = "[ProposerCheck:0][Probability\ncalculations (validatoreconomics_v6_SJ_probs_1)_EB:0]";
+	HR_State_2 = "";
+	HR_State_3 = "";
+	HR_State_4 = "";
+	HR_State_5 = "";
+	HR_State_6 = "";
+	HR_State_7 = "";
+	HR_State_8 = "";
+	HR_State_9 = "";
+	HR_LinkControlPoints = "";
+	HR_Group = "0";
+    }
+
+    node stakercategory
+    {
+	label = "Staker\nCategories";
+	position = (395 41);
+	states = ("Small-scale staker" "Large-scale individual solo stakers" "Large-scale institutional solo stakers" "Centralized staking pools" "Semi-decentralized staking pools");
+	HR_State_4 = "rocketpool, Lido... each one is different";
+	HR_LinkControlPoints = "";
+	HR_State_3 = "";
+	HR_NodeSize = "(160, 40)";
+	HR_State_2 = "ie. companies staking their own ETH";
+	HR_LinkGroup = "[EB:0]";
+	HR_LinkMode = "[Consolidation_1:0][EB:0]";
+	HR_Group = "0";
+	HR_Desc = "Vitalik's suggested categories:\n* Small-scale solo stakers (32 - a few hundred ETH)\n* Large-scale individual solo stakers (1000+ ETH)\n* Large-scale institutional solo stakers (ie. companies staking their own ETH)\n* Centralized staking pools\n* Semi-decentralized staking pools (rocketpool, Lido... each one is different)\n* Each of the above, but using DVT";
+	HR_State_1 = "1000+ ETH";
+	HR_State_0 = "32 - a few hundred ETH";
+    }
+
+    potential (NextProposer | Candidate ProposerCheck)
+    {
+	data = ((( 1 0 )	%  Candidate=false  ProposerCheck=false
+		 ( 1 0 ))	%  Candidate=false  ProposerCheck=true
+		(( 1 0 )	%  Candidate=true  ProposerCheck=false
+		 ( 0 1 )));	%  Candidate=true  ProposerCheck=true
+    }
+
+    potential (ProposerCheck | validatoreconomics_probs_1_EB_copy)
+    {
+	data = (( 0.984375 0.015625 )	%  validatoreconomics_probs_1_EB_copy=0
+		( 0.96875 0.03125 )	%  validatoreconomics_probs_1_EB_copy=1
+		( 0.921875 0.078125 )	%  validatoreconomics_probs_1_EB_copy=2
+		( 0.84375 0.15625 )	%  validatoreconomics_probs_1_EB_copy=3
+		( 0.53125 0.46875 )	%  validatoreconomics_probs_1_EB_copy=4
+		( 1E-15 1 ));	%  validatoreconomics_probs_1_EB_copy=5
+    }
+
+    potential (Candidate | validatoreconomics_probs_1_Candidate)
+    {
+	data = (( 1 0 )	%  validatoreconomics_probs_1_Candidate=false
+		( 0 1 ));	%  validatoreconomics_probs_1_Candidate=true
+    }
+
+    potential (EB | stakercategory)
+    {
+	data = (( 0.4 0.4 0.2 1E-12 1E-12 1E-12 )	%  stakercategory=Small-scale staker
+		( 0.2 0.2 0.2 0.2 0.1 0.1 )	%  stakercategory=Large-scale individual solo stakers
+		( 0.15 0.15 0.1 0.1 0.2 0.3 )	%  stakercategory=Large-scale institutional solo stakers
+		( 0.25 0.25 0.15 0.15 0.1 0.1 )	%  stakercategory=Centralized staking pools
+		( 0.3 0.2 0.1 0.1 0.1 0.2 ));	%  stakercategory=Semi-decentralized staking pools
+    }
+
+    potential (stakercategory)
+    {
+	data = ( 0.3 0.15 0.15 0.1 0.3 );
+    }
+} % class validatoreconomics
