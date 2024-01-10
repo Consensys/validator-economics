@@ -1,0 +1,51 @@
+---
+title: "Validator Economics: Proposer selection - negative binomial"
+author:
+- name: Sandra Johnson
+  url: https://twitter.com/sandJohnson
+  affiliation: Consensys Software Inc (Research Group)
+date: "`r Sys.Date()`"
+description: 
+  Visualisation of number of iterations until a successful proposer found
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+```{r message=FALSE}
+library(knitr)
+library(lubridate)
+library(rmarkdown)
+
+options(digits=10)
+options(scipen = 999) 
+
+# See knit options in https://www.r-bloggers.com/2021/03/default-knitr-options-and-hooks/ 
+knitr::opts_chunk$set(dpi = if (knitr::is_latex_output()) 72 else 300,
+                      echo=FALSE)
+```
+
+## Negative binomial for proposer eligibility check
+Model the number of failures (i.e. not passing the proposer check) before a validator passes the check to become the next proposer. We assume an active validator set consisting entirely of single stake validators (32ETH) when the MaxEB has increased to 2,048 ETH.
+```{r}
+n = 716800       # number of draws 
+size = 1         # number of successes
+prob = 0.015625  # probability of success
+negative_bin <- rnbinom(n, size, prob)
+
+median_failures <- median(negative_bin)
+
+# probability of fewer than 100 failures
+pnbinom(c(100), size, prob, lower.tail = TRUE, log.p = FALSE)
+
+# probability of more than 100 failures
+pnbinom(c(100,200,300,400), size, prob, lower.tail = FALSE, log.p = FALSE)
+
+hist(negative_bin,                                         
+     breaks = 500,
+     main = "",
+     xlab='Number of proposer check failures',
+     xlim=c(0,500),
+     ylim = c(0,35000))
+
+
+```

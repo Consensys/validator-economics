@@ -84,6 +84,6 @@ ggplot() +
   geom_abline(slope=255,intercept=0) +
   coord_flip()
 
-#ggsave(ggsave("/Users/sandra/data/validator-economics/plots/random-integers-QQ.png"))
+#ggsave("/Users/sandra/data/validator-economics/plots/random-integers-QQ.png")
 
 ```
