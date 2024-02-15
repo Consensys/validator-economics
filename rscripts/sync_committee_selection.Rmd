@@ -1,0 +1,177 @@
+---
+title: "Validator Economics: Sync committee selection"
+author:
+- name: Sandra Johnson
+  url: https://twitter.com/sandJohnson
+  affiliation: Consensys Software Inc (Research Group)
+date: "`r Sys.Date()`"
+description: 
+  Calculation and visualisation of sync committee selection probabilities for increased maximum effective balance.
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r message=FALSE}
+library(data.table)
+library(ggplot2)
+library(knitr)
+library(lubridate)
+library(rmarkdown)
+library(skimr)
+library(tibble)
+library(tidyverse)
+
+options(digits=10)
+options(scipen = 999) 
+
+knitr::opts_chunk$set(dpi = if (knitr::is_latex_output()) 72 else 300,
+                      echo=FALSE)
+```
+## Fetch R functions to use
+```{r}
+source("sync_functions.R")
+```
+## Sync committee selection
+
+The probability of a validator being selected to participate in the sync committee
+adheres to the following process: 
+1) The validator indices are shuffled 
+2) One candidate validator results from the shuffled index
+3) A random byte is generated for this candidate (note this candidate may have been chosen before but more than likely with a different generated random byte)
+4) A comparison is made between the candidate validator's effective balance * maximum bytes value (255) and MaxEB * random byte generated. If the first term is bigger than the second, then the validator is added to the sync committee.
+5) Another iteration of the loop is executed until we have chosen enough validators (each member of the committee is present >= 1) to make up the sync committee
+
+
+
+## PROCESS OF SELECTING SYNC COMMITTEE MEMBERS
+
+ 1. Shuffle index of validators (shuffled_index)
+ 2. Assign candidate index (candidate_index <- shuffled_index)
+ 3. Generate a random byte for that candidate
+ 4. Check if the candidate passes the test
+    - compare the candidate validator's effective balance * maximum bytes value (255) and
+      MaxEB * random byte generated. 
+ 5. Yes - a. add to sync committee  if membership count is not yet 512
+        - b. increment membership counter
+ 6. No - do not increment membership counter & pass through the loop again
+
+This is a similar process to proposer selection, but the difference here is that 
+we are sampling WITH REPLACEMENT to select several validators to participate in a committee. Therefore each validator could be chosen more than once and the probabilities of being chosen do not change with each draw.
+```{r}
+
+#' EXAMPLE SCENARIO, PRE-EIP7521: 
+#' ------------------------------
+#' Total validator set size - 900,000 three stakers (A,B,C), each with 300,000 validators
+#' Shuffle the entire set each time to draw the next candidate
+# -------------------------------------------------------------------------------------
+active_validators_df_now <- tibble(
+  staker = sample(c(rep("A",300000), rep("B",300000), rep("C", 300000))),
+  selected = rep(0,900000)
+)
+
+# Note we are assuming that all validators have 32 ETH EB
+# Pre-EIP-7521 all validators will pass the sync committee check
+# We are therefore only really looking at how many validators have been selected 
+# more than once to join the sync committee
+
+sync_committee_df_now <- assign_sync_committee(active_validators_df_now)
+# What is the number of unique validators in the sync committee?
+sync_committee_unique_df_now <- assign_unique_sync_mbrs(sync_committee_df_now) 
+# As expected no duplicates when the active validator set is so large, 
+# there were no validators elected to the sync committee more than once
+
+# Let us also look at how the stakers fared. 
+# Each staker had 300,000 validatotrs & 
+# all validators had 32 ETH with MaxEB = 32 ETH (pre-EIP-7251)
+sync_staker_totals_df_now <- assign_total_sync_stakers(sync_committee_df_now)
+
+
+## TODO: Plot proportion of stake (each 1/3) against the proportional 
+## ----  representation in the sync committee (A: 152/512, B: 187/512, C: 173/512)
+##                                            (A: 0.298,   B: 0.365,   C: 0.338 )
+##       Repeat with different seeds to get a distribution
+# ======================================================================================
+```
+## Explore sync committee membership in post-EIP-7521 Ethereum
+```{r}
+## Sync committee selection post-EIP-7521
+## =========================================================================================+
+## Use current values of active validator set, ignoring staker groups (?), but              |
+## distribution across various consolidated validators                                      |
+## Validator set total = 900,000                                                            |
+## Staker A: All single: 300,000 (=300,000)                                                 |
+## Staker B: 1x: 2; 30x: 1; 64x: 4687 (=4,690)                                              |
+## Staker C: 1x: 50,024; 2x: 25,000; 5x: 10,000; 10x: 5,000; 30x: 1,660; 64x: 784 (=92,468) |
+## =========================================================================================+
+active_validators_df_maxeb_now <- tibble(
+  staker = c(rep("A",300000), rep("B",4690), rep("C", 92468)),
+  EB = c(rep(32,300002), rep(960,1), rep(2048,4687), rep(32,50024), rep(64,25000), rep(160,10000), rep(320,5000), rep(960,1660),rep(2048,784)) 
+)
+
+# Shuffle the validator set
+active_validators_df_maxeb_shuffled_now <- active_validators_df_maxeb_now[sample(1:nrow(active_validators_df_maxeb_now)), ] 
+
+sync_committee_df_maxeb_now <- assign_maxeb_sync_committee(active_validators_df_maxeb_shuffled_now)
+# Check for distinct validators. This run had 510 unique validators, so we had validators selected
+# more than once (187738 & 380987 were selected twice - both are from staker B with 2,048 ETH each). They are
+sync_committee_unique_df_maxeb_now <- assign_unique_sync_mbrs(sync_committee_df_maxeb_now)
+sync_staker_totals_df_maxeb_now <- assign_total_sync_stakers(sync_committee_df_maxeb_now)
+# Another interesting grouping would be the validator EB for each staker:
+sync_staker_totals_EB_df_maxeb_now <- assign_total_sync_stakers_EB(sync_committee_df_maxeb_now)
+
+# Total weight of sync committee (total staked ETH)
+# =================================================
+sync_committee_total_ETH_maxEB_now <- sum(sync_committee_df_maxeb_now$EB)  # 419,552 & 428704 
+sync_committee_total_ETH_now <- 32 * 512      # 16,384
+
+
+
+```
+## Probabilities and Expected values
+Using total active validator set of 900,000 (dataframes suffixed by _now)
+```{r}
+# Totals for each type of validator
+active_validators_df_maxeb_now_EB_totals <- active_validators_df_maxeb_now %>%
+  group_by(EB) %>%
+  summarise(selected = n()) 
+
+# Totals for each staker
+active_validators_df_maxeb_now_staker_totals <- active_validators_df_maxeb_now %>%
+  group_by(staker) %>%
+  summarise(selected = n()) %>%
+  mutate(prob = selected/397158)
+
+# Totals by staker & validator type
+# Add probability column, which is the probability of being selected as a 
+# sync committee member
+active_validators_df_maxeb_now_staker_EB_totals <- active_validators_df_maxeb_now %>%
+  group_by(staker, EB) %>%
+  summarise(total = n(), .groups = 'keep') %>%  # summarise with both grouping vars (default is 'drop_last')
+  mutate(prob = total/397158) %>%
+  arrange(EB,staker)
+
+# Expected numbers in the sync committee
+# Expected value = n*p 
+expected_sync_mbrs <- active_validators_df_maxeb_now_staker_EB_totals %>%
+  mutate(selectacceptprob = prob * case_when(
+      EB == 32 ~ (1/64),
+      EB == 64 ~ (2/64),
+      EB == 160 ~ (5/64),
+      EB == 320 ~ (10/64),
+      EB == 960 ~ (30/64),
+      EB == 2048 ~ 1,
+      TRUE ~ 0)
+      ) 
+
+totalselectacceptprobs = sum(expected_sync_mbrs$selectacceptprob)
+
+# Expected proportions by staker and EB (i.e. validator consolidation type)
+expected_sync_mbrs <- expected_sync_mbrs %>%
+  mutate(expected = (selectacceptprob/totalselectacceptprobs) * 512) %>%
+  mutate(proportions = expected/total) 
+
+# Check total selected = 512 
+sync_committee_total <- sum(expected_sync_mbrs$expected)
+```
+
